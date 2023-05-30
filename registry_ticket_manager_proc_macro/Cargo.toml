@@ -1,0 +1,12 @@
+[package]
+name = "registry_ticket_manager_proc_macro"
+version = "0.1.0"
+edition = "2021"
+authors = ["Tuulikki Unelma <tuulikki.unelma@proton.me>"]
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = "2.0"
+quote = "1.0"

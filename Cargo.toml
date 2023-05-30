@@ -1,0 +1,12 @@
+[workspace]
+members = ["registry_ticket_manager_proc_macro"]
+
+[package]
+name = "registry_ticket_manager"
+version = "0.1.0"
+edition = "2021"
+authors = ["Tuulikki Unelma <tuulikki.unelma@proton.me>"]
+
+[dependencies]
+registry_ticket_manager_proc_macro = { path = "registry_ticket_manager_proc_macro" }
+indexmap = "1.9"
