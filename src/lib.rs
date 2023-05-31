@@ -50,12 +50,17 @@
 //! }
 //! ```
 
-use indexmap::{map::Entry, IndexMap};
+pub mod iter;
+
 use std::{
     hash::Hash,
     marker::PhantomData,
     ops::{Index, IndexMut},
 };
+
+use indexmap::{map::Entry, IndexMap};
+
+use iter::*;
 
 /// A manager of arbitrary values with both identifier keys and index based tickets
 ///
@@ -114,7 +119,7 @@ where
     Identifier: Hash + Eq,
 {
     map: IndexMap<Identifier, T>,
-    _phantom: PhantomData<Ticket>,
+    _phantom: PhantomData<*const Ticket>,
 }
 
 /// A registry manager ticket
@@ -269,6 +274,26 @@ where
     /// Returns the ticket of the given identifier, if it exists
     pub fn get_ticket_of(&self, id: &Identifier) -> Option<Ticket> {
         self.map.get_index_of(id).and_then(Ticket::from_index)
+    }
+
+    /// Returns a referencing iterator over the values
+    ///
+    /// The iterator's item-type is `(Ticket, &'a Identifier, &'a T)`.
+    pub fn iter(&self) -> Iter<T, Ticket, Identifier> {
+        Iter {
+            iter: self.map.iter().enumerate(),
+            _phantom: PhantomData,
+        }
+    }
+
+    /// Returns a mutable iterator over the values
+    ///
+    /// The iterator's item-type is `(Ticket, &'a Identifier, &mut 'a T)`.
+    pub fn iter_mut(&mut self) -> IterMut<T, Ticket, Identifier> {
+        IterMut {
+            iter: self.map.iter_mut().enumerate(),
+            _phantom: PhantomData,
+        }
     }
 }
 
